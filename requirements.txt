@@ -12,4 +12,5 @@ sqlalchemy
 plotly
 jupyter
 notebook
+openpyxl
 tqdm
