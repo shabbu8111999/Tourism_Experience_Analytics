@@ -6,9 +6,10 @@ scikit-learn
 xgboost
 lightgbm
 scipy
-streamlit
-plotly
+statsmodels
+flask
 sqlalchemy
+plotly
 jupyter
 notebook
 tqdm
