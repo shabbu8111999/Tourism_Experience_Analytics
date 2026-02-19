@@ -1,38 +1,66 @@
+function getUserId() {
+    return document.getElementById("user_id").value;
+}
+
+function clearResults() {
+    document.getElementById("results").innerHTML = "";
+}
+
 function getRecommendations() {
 
-    const userId = document.getElementById("user_id").value;
-
-    if (!userId) {
-        alert("Please enter a User ID");
-        return;
-    }
+    clearResults();
+    const userId = getUserId();
 
     fetch("/recommend", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ user_id: userId })
     })
-    .then(response => response.json())
+    .then(res => res.json())
     .then(data => {
-
         const results = document.getElementById("results");
-        results.innerHTML = "";
-
-        if (data.recommendations.length === 0) {
-            results.innerHTML = "<li>No recommendations found.</li>";
-            return;
-        }
-
         data.recommendations.forEach(item => {
             const li = document.createElement("li");
             li.textContent = item;
             results.appendChild(li);
         });
+    });
+}
+
+function predictRating() {
+
+    clearResults();
+    const userId = getUserId();
+
+    fetch("/predict_rating", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user_id: userId })
     })
-    .catch(error => {
-        console.error("Error:", error);
-        alert("Something went wrong.");
+    .then(res => res.json())
+    .then(data => {
+        const results = document.getElementById("results");
+        const li = document.createElement("li");
+        li.textContent = "Predicted Rating: " + data.predicted_rating;
+        results.appendChild(li);
+    });
+}
+
+function predictVisitMode() {
+
+    clearResults();
+    const userId = getUserId();
+
+    fetch("/predict_visit_mode", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user_id: userId })
+    })
+    .then(res => res.json())
+    .then(data => {
+        const results = document.getElementById("results");
+        const li = document.createElement("li");
+        li.textContent = "Predicted Visit Mode: " + data.predicted_visit_mode;
+        results.appendChild(li);
     });
 }
