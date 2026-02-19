@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 import joblib
 import numpy as np
+import pandas as pd
 from utils import recommend_items
 
 app = Flask(__name__)
@@ -9,14 +10,18 @@ app = Flask(__name__)
 regression_model = joblib.load("models/regression.pkl")
 classifier_model = joblib.load("models/classifier.pkl")
 
-# Load scaler and feature columns
+# Load scaler and feature info
 scaler = joblib.load("models/scaler.pkl")
 feature_columns = joblib.load("models/feature_columns.pkl")
+
+# Load full model dataset
+model_data = joblib.load("models/model_data.pkl")
 
 @app.route("/")
 def home():
     return render_template("index.html")
 
+# ---------------- Recommendation ----------------
 @app.route("/recommend", methods=["POST"])
 def recommend():
     data = request.get_json(force=True)
@@ -24,31 +29,43 @@ def recommend():
     recommendations = recommend_items(user_id)
     return jsonify({"recommendations": recommendations})
 
+# ---------------- Rating Prediction ----------------
 @app.route("/predict_rating", methods=["POST"])
 def predict_rating():
 
     data = request.get_json(force=True)
-    input_features = data.get("features")
+    user_id = int(data.get("user_id"))
 
-    # Convert to numpy array
-    input_array = np.array(input_features).reshape(1, -1)
+    if user_id not in model_data["UserId"].values:
+        return jsonify({"error": "User not found"})
 
-    # Scale input
-    input_scaled = scaler.transform(input_array)
+    user_row = model_data[model_data["UserId"] == user_id]
 
-    prediction = regression_model.predict(input_scaled)[0]
+    # Select correct feature columns
+    X_user = user_row[feature_columns]
+
+    # Scale features
+    X_scaled = scaler.transform(X_user)
+
+    prediction = regression_model.predict(X_scaled)[0]
 
     return jsonify({"predicted_rating": round(float(prediction), 2)})
 
+# ---------------- Visit Mode Prediction ----------------
 @app.route("/predict_visit_mode", methods=["POST"])
 def predict_visit_mode():
 
     data = request.get_json(force=True)
-    input_features = data.get("features")
+    user_id = int(data.get("user_id"))
 
-    input_array = np.array(input_features).reshape(1, -1)
+    if user_id not in model_data["UserId"].values:
+        return jsonify({"error": "User not found"})
 
-    prediction = classifier_model.predict(input_array)[0]
+    user_row = model_data[model_data["UserId"] == user_id]
+
+    X_user = user_row[feature_columns]
+
+    prediction = classifier_model.predict(X_user)[0]
 
     return jsonify({"predicted_visit_mode": int(prediction)})
 
