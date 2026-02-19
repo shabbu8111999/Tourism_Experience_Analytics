@@ -47,6 +47,9 @@ def predict_rating():
 
     prediction = regression_model.predict(X_scaled)[0]
 
+    # Clip prediction between 1 and 5
+    prediction = max(1, min(5, prediction))
+
     return jsonify({"predicted_rating": round(float(prediction), 2)})
 
 # ---------------- Visit Mode Prediction ----------------
