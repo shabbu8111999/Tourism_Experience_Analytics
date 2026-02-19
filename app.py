@@ -1,10 +1,9 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import joblib
 from utils import recommend_items
 
 app = Flask(__name__)
 
-# Load models
 regression_model = joblib.load("models/regression.pkl")
 classifier_model = joblib.load("models/classifier.pkl")
 
