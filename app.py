@@ -14,9 +14,10 @@ def home():
 
 @app.route("/recommend", methods=["POST"])
 def recommend():
-    user_id = int(request.form["user_id"])
+    data = request.get_json()
+    user_id = int(data["user_id"])
     recommendations = recommend_items(user_id)
-    return render_template("index.html", recommendations=recommendations)
+    return jsonify({"recommendations": recommendations})
 
 if __name__ == "__main__":
     app.run(debug=True)
