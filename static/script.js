@@ -3,13 +3,24 @@ function getUserId() {
 }
 
 function clearResults() {
-    document.getElementById("results").innerHTML = "";
+    const results = document.getElementById("results");
+    results.innerHTML = "";
+}
+
+function showMessage(message) {
+    const results = document.getElementById("results");
+    results.innerHTML = "<p>" + message + "</p>";
 }
 
 function getRecommendations() {
 
     clearResults();
     const userId = getUserId();
+
+    if (!userId) {
+        showMessage("Please enter a User ID.");
+        return;
+    }
 
     fetch("/recommend", {
         method: "POST",
@@ -18,12 +29,26 @@ function getRecommendations() {
     })
     .then(res => res.json())
     .then(data => {
+
         const results = document.getElementById("results");
+
+        if (!data.recommendations || data.recommendations.length === 0) {
+            showMessage("No recommendations found.");
+            return;
+        }
+
+        const ul = document.createElement("ul");
+
         data.recommendations.forEach(item => {
             const li = document.createElement("li");
             li.textContent = item;
-            results.appendChild(li);
+            ul.appendChild(li);
         });
+
+        results.appendChild(ul);
+    })
+    .catch(() => {
+        showMessage("Error retrieving recommendations.");
     });
 }
 
@@ -32,6 +57,11 @@ function predictRating() {
     clearResults();
     const userId = getUserId();
 
+    if (!userId) {
+        showMessage("Please enter a User ID.");
+        return;
+    }
+
     fetch("/predict_rating", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -39,10 +69,16 @@ function predictRating() {
     })
     .then(res => res.json())
     .then(data => {
-        const results = document.getElementById("results");
-        const li = document.createElement("li");
-        li.textContent = "Predicted Rating: " + data.predicted_rating;
-        results.appendChild(li);
+
+        if (data.error) {
+            showMessage(data.error);
+            return;
+        }
+
+        showMessage("Predicted Rating: " + data.predicted_rating);
+    })
+    .catch(() => {
+        showMessage("Error predicting rating.");
     });
 }
 
@@ -51,6 +87,11 @@ function predictVisitMode() {
     clearResults();
     const userId = getUserId();
 
+    if (!userId) {
+        showMessage("Please enter a User ID.");
+        return;
+    }
+
     fetch("/predict_visit_mode", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -58,9 +99,15 @@ function predictVisitMode() {
     })
     .then(res => res.json())
     .then(data => {
-        const results = document.getElementById("results");
-        const li = document.createElement("li");
-        li.textContent = "Predicted Visit Mode: " + data.predicted_visit_mode;
-        results.appendChild(li);
+
+        if (data.error) {
+            showMessage(data.error);
+            return;
+        }
+
+        showMessage("Predicted Visit Mode: " + data.predicted_visit_mode);
+    })
+    .catch(() => {
+        showMessage("Error predicting visit mode.");
     });
 }
