@@ -5,15 +5,15 @@
 </head>
 <body>
 
-<h2>Tourism Recommendation System</h2>
+<h2>Tourism Analytics System</h2>
 
 <input type="number" id="user_id" placeholder="Enter User ID">
 
-<!-- IMPORTANT: type="button" -->
-<button type="button" onclick="getRecommendations()">
-    Get Recommendations
-</button>
+<button type="button" onclick="getRecommendations()">Get Recommendations</button>
+<button type="button" onclick="predictRating()">Predict Rating</button>
+<button type="button" onclick="predictVisitMode()">Predict Visit Mode</button>
 
+<h3>Results:</h3>
 <ul id="results"></ul>
 
 <script src="{{ url_for('static', filename='script.js') }}"></script>
