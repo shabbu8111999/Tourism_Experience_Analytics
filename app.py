@@ -43,9 +43,7 @@ def predict_rating():
 
     X_user = user_row[feature_columns]
 
-    X_scaled = scaler.transform(X_user)
-
-    prediction = regression_model.predict(X_scaled)[0]
+    prediction = regression_model.predict(X_user)[0]
 
     # Clip prediction between 1 and 5
     prediction = max(1, min(5, prediction))
