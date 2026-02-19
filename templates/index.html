@@ -2,14 +2,17 @@
 <html>
 <head>
     <title>Tourism Analytics App</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
 <h2>Tourism Recommendation System</h2>
 
 <input type="number" id="user_id" placeholder="Enter User ID">
-<button onclick="getRecommendations()">Get Recommendations</button>
+
+<!-- IMPORTANT: type="button" -->
+<button type="button" onclick="getRecommendations()">
+    Get Recommendations
+</button>
 
 <ul id="results"></ul>
 
