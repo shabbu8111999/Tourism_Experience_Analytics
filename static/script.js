@@ -1,113 +1,112 @@
-function getUserId() {
-    return document.getElementById("user_id").value;
+const loader = document.getElementById("loader");
+const results = document.getElementById("results");
+
+function toggleLoader(show) {
+    loader.classList.toggle("hidden", !show);
 }
 
 function clearResults() {
-    const results = document.getElementById("results");
     results.innerHTML = "";
 }
 
 function showMessage(message) {
-    const results = document.getElementById("results");
     results.innerHTML = "<p>" + message + "</p>";
+}
+
+function getUserId() {
+    return document.getElementById("user_id").value;
 }
 
 function getRecommendations() {
 
     clearResults();
-    const userId = getUserId();
+    toggleLoader(true);
 
-    if (!userId) {
-        showMessage("Please enter a User ID.");
-        return;
-    }
+    const userId = getUserId();
 
     fetch("/recommend", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {"Content-Type": "application/json"},
         body: JSON.stringify({ user_id: userId })
     })
     .then(res => res.json())
     .then(data => {
-
-        const results = document.getElementById("results");
+        toggleLoader(false);
 
         if (!data.recommendations || data.recommendations.length === 0) {
             showMessage("No recommendations found.");
             return;
         }
 
-        const ul = document.createElement("ul");
-
+        let html = "<h3>Recommended Attractions</h3><ul>";
         data.recommendations.forEach(item => {
-            const li = document.createElement("li");
-            li.textContent = item;
-            ul.appendChild(li);
+            html += "<li>" + item + "</li>";
         });
+        html += "</ul>";
 
-        results.appendChild(ul);
-    })
-    .catch(() => {
-        showMessage("Error retrieving recommendations.");
+        results.innerHTML = html;
     });
 }
 
 function predictRating() {
 
     clearResults();
-    const userId = getUserId();
+    toggleLoader(true);
 
-    if (!userId) {
-        showMessage("Please enter a User ID.");
-        return;
-    }
+    const userId = getUserId();
 
     fetch("/predict_rating", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {"Content-Type": "application/json"},
         body: JSON.stringify({ user_id: userId })
     })
     .then(res => res.json())
     .then(data => {
+        toggleLoader(false);
 
         if (data.error) {
             showMessage(data.error);
             return;
         }
 
-        showMessage("Predicted Rating: " + data.predicted_rating);
-    })
-    .catch(() => {
-        showMessage("Error predicting rating.");
+        results.innerHTML =
+            "<h3>Predicted Rating</h3>" +
+            "<p>The system estimates this user's expected experience rating as <b>" +
+            data.predicted_rating +
+            "</b> based on historical behavior patterns.</p>";
     });
 }
 
 function predictVisitMode() {
 
     clearResults();
-    const userId = getUserId();
+    toggleLoader(true);
 
-    if (!userId) {
-        showMessage("Please enter a User ID.");
-        return;
-    }
+    const userId = getUserId();
 
     fetch("/predict_visit_mode", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {"Content-Type": "application/json"},
         body: JSON.stringify({ user_id: userId })
     })
     .then(res => res.json())
     .then(data => {
+        toggleLoader(false);
 
         if (data.error) {
             showMessage(data.error);
             return;
         }
 
-        showMessage("Predicted Visit Mode: " + data.predicted_visit_mode);
-    })
-    .catch(() => {
-        showMessage("Error predicting visit mode.");
+        results.innerHTML =
+            "<h3>Predicted Visit Mode</h3>" +
+            "<p>The model predicts that this user is most likely traveling as <b>" +
+            data.predicted_visit_mode +
+            "</b> based on behavioral and regional patterns.</p>";
     });
 }
+
+/* Dark Mode Toggle */
+document.getElementById("theme-toggle").addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+});
