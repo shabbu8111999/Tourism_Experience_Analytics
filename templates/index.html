@@ -2,39 +2,68 @@
 <html>
 <head>
     <title>Tourism Experience Analytics</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
+
+<nav class="navbar">
+    <div class="nav-left">
+        <i class="fa-solid fa-globe"></i>
+        <span>Tourism Analytics System</span>
+    </div>
+    <div class="nav-right">
+        <button id="theme-toggle">
+            <i class="fa-solid fa-moon"></i>
+        </button>
+    </div>
+</nav>
 
 <div class="container">
 
-    <h1>Tourism Experience Analytics System</h1>
-    <p class="subtitle">Regression • Classification • Recommendation</p>
+    <h1>Tourism Experience Analytics</h1>
+    <p class="subtitle">
+        Regression • Classification • Recommendation Engine
+    </p>
 
     <div class="card">
-        <h2>Enter User ID</h2>
+        <h2><i class="fa-solid fa-user"></i> Enter User ID</h2>
         <input type="number" id="user_id" placeholder="Enter User ID">
-        
+
         <div class="button-group">
-            <button onclick="getRecommendations()">Get Recommendations</button>
-            <button onclick="predictRating()">Predict Rating</button>
-            <button onclick="predictVisitMode()">Predict Visit Mode</button>
+            <button onclick="getRecommendations()">
+                <i class="fa-solid fa-star"></i> Recommend
+            </button>
+            <button onclick="predictRating()">
+                <i class="fa-solid fa-chart-line"></i> Predict Rating
+            </button>
+            <button onclick="predictVisitMode()">
+                <i class="fa-solid fa-route"></i> Predict Visit Mode
+            </button>
         </div>
     </div>
 
     <div class="card">
-        <h2>Results</h2>
+        <h2><i class="fa-solid fa-lightbulb"></i> Results</h2>
+
+        <div id="loader" class="loader hidden"></div>
+
         <div id="results" class="results-box">
-            <p class="placeholder">Results will appear here...</p>
+            <p class="placeholder">Your results will appear here.</p>
         </div>
     </div>
 
     <footer>
-        <p>Internship Project • Tourism Analytics using ML & Flask</p>
+        <p>Internship Project • Built with Flask, ML & JavaScript</p>
     </footer>
 
 </div>
 
 <script src="{{ url_for('static', filename='script.js') }}"></script>
+
 </body>
 </html>
