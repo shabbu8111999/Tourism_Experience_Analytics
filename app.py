@@ -77,4 +77,5 @@ def predict_visit_mode():
     return jsonify({"predicted_visit_mode": visit_mode_label})
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    #app.run(debug=True)
+    app.run()
