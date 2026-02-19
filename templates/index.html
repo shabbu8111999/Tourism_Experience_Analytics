@@ -1,22 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Tourism Analytics App</title>
+    <title>Tourism Experience Analytics</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-<h2>Tourism Analytics System</h2>
+<div class="container">
 
-<input type="number" id="user_id" placeholder="Enter User ID">
+    <h1>Tourism Experience Analytics System</h1>
+    <p class="subtitle">Regression • Classification • Recommendation</p>
 
-<button type="button" onclick="getRecommendations()">Get Recommendations</button>
-<button type="button" onclick="predictRating()">Predict Rating</button>
-<button type="button" onclick="predictVisitMode()">Predict Visit Mode</button>
+    <div class="card">
+        <h2>Enter User ID</h2>
+        <input type="number" id="user_id" placeholder="Enter User ID">
+        
+        <div class="button-group">
+            <button onclick="getRecommendations()">Get Recommendations</button>
+            <button onclick="predictRating()">Predict Rating</button>
+            <button onclick="predictVisitMode()">Predict Visit Mode</button>
+        </div>
+    </div>
 
-<h3>Results:</h3>
-<ul id="results"></ul>
+    <div class="card">
+        <h2>Results</h2>
+        <div id="results" class="results-box">
+            <p class="placeholder">Results will appear here...</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>Internship Project • Tourism Analytics using ML & Flask</p>
+    </footer>
+
+</div>
 
 <script src="{{ url_for('static', filename='script.js') }}"></script>
-
 </body>
 </html>
