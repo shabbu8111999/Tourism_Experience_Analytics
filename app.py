@@ -36,15 +36,13 @@ def predict_rating():
     data = request.get_json(force=True)
     user_id = int(data.get("user_id"))
 
-    if user_id not in model_data["UserId"].values:
+    if user_id not in model_data["UserId"].unique():
         return jsonify({"error": "User not found"})
 
-    user_row = model_data[model_data["UserId"] == user_id]
+    user_row = model_data[model_data["UserId"] == user_id].iloc[[0]]
 
-    # Select correct feature columns
     X_user = user_row[feature_columns]
 
-    # Scale features
     X_scaled = scaler.transform(X_user)
 
     prediction = regression_model.predict(X_scaled)[0]
