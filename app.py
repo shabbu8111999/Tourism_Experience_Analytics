@@ -50,6 +50,13 @@ def predict_rating():
     return jsonify({"predicted_rating": round(float(prediction), 2)})
 
 # ---------------- Visit Mode Prediction ----------------
+visit_mode_map = {
+    0: "Solo",
+    1: "Family",
+    2: "Friends",
+    3: "Couple",
+    4: "Business"
+}
 @app.route("/predict_visit_mode", methods=["POST"])
 def predict_visit_mode():
 
@@ -64,8 +71,9 @@ def predict_visit_mode():
     X_user = user_row[feature_columns]
 
     prediction = classifier_model.predict(X_user)[0]
+    visit_mode_label = visit_mode_map.get(int(prediction), "Unknown")
 
-    return jsonify({"predicted_visit_mode": int(prediction)})
+    return jsonify({"predicted_visit_mode": visit_mode_label})
 
 if __name__ == "__main__":
     app.run(debug=True)
