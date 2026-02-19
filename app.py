@@ -13,8 +13,8 @@ def home():
 
 @app.route("/recommend", methods=["POST"])
 def recommend():
-    data = request.get_json()
-    user_id = int(data["user_id"])
+    data = request.get_json(force=True)  # force JSON parsing
+    user_id = int(data.get("user_id"))
     recommendations = recommend_items(user_id)
     return jsonify({"recommendations": recommendations})
 
