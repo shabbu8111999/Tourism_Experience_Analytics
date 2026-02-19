@@ -8,20 +8,12 @@
 
 <h2>Tourism Recommendation System</h2>
 
-<form method="POST" action="/recommend">
-    <label>Enter User ID:</label>
-    <input type="number" name="user_id" required>
-    <button type="submit">Get Recommendations</button>
-</form>
+<input type="number" id="user_id" placeholder="Enter User ID">
+<button onclick="getRecommendations()">Get Recommendations</button>
 
-{% if recommendations %}
-    <h3>Recommended Attractions:</h3>
-    <ul>
-        {% for item in recommendations %}
-            <li>{{ item }}</li>
-        {% endfor %}
-    </ul>
-{% endif %}
+<ul id="results"></ul>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 
 </body>
 </html>
