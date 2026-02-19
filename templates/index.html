@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tourism Analytics App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<h2>Tourism Recommendation System</h2>
+
+<form method="POST" action="/recommend">
+    <label>Enter User ID:</label>
+    <input type="number" name="user_id" required>
+    <button type="submit">Get Recommendations</button>
+</form>
+
+{% if recommendations %}
+    <h3>Recommended Attractions:</h3>
+    <ul>
+        {% for item in recommendations %}
+            <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+</body>
+</html>
